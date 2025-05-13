@@ -7,9 +7,9 @@ function Index() {
     <div>
       <button
         className="border px-6 py-3 text-white bg-blue-500 rounded-lg cursor-pointer"
-        onClick={() => navigator("login")}
+        onClick={() => navigator("signup")}
       >
-        Login
+        Sign Up
       </button>
     </div>
   );
