@@ -65,16 +65,14 @@ function Quiz() {
   };
 
   const getButtonClass = (option) => {
-    let baseClass = "border w-full px-5 py-4 text-left";
+    let baseClass = "border cursor-pointer hover:bg-gray-200 dark:hover:bg-neutral-800  w-full px-5 py-4 text-left";
     if (state.isAnswered) {
       if (option === question.answer) {
-        baseClass += " bg-green-200";
+        baseClass += " bg-green-200 text-green-600 font-semibold";
       } else if (option === state.selected && !state.isCorrect) {
-        baseClass += " bg-red-200";
+        baseClass += " bg-red-200 text-red-600 font-semibold";
       }
-    } else {
-      baseClass += " hover:bg-gray-200";
-    }
+    } 
     return baseClass;
   };
 
@@ -87,7 +85,7 @@ function Quiz() {
         </p>
         <button
           onClick={() => dispatch({ type: "RESTART" })}
-          className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 text-lg"
+          className="bg-blue-500 cursor-pointer hover:bg-blue-600 text-white py-2 px-6 text-lg"
         >
           Restart Quiz
         </button>
@@ -96,7 +94,7 @@ function Quiz() {
   }
 
   return (
-    <div className="border p-7 flex flex-col items-center justify-evenly max-w-md mx-auto">
+    <div className="border p-7 flex flex-col items-center justify-evenly w-[430px]  mx-auto">
       <div className="w-full mb-4">
         <span className="text-gray-600">
           Question {state.index + 1} of {quizData.length}
@@ -106,7 +104,7 @@ function Quiz() {
 
       <p className="text-xl mb-10 font-semibold">{question.question}</p>
 
-      <div className="w-full flex flex-col gap-4 mb-8">
+      <div className="w-full flex flex-col gap-4 mb-8 ">
         {question.options.map((option, idx) => (
           <button
             key={idx}
@@ -126,7 +124,7 @@ function Quiz() {
           </p>
           <button
             onClick={handleNext}
-            className="bg-blue-500 hover:bg-blue-600 w-full text-white py-2 text-lg"
+            className="bg-blue-500 cursor-pointer hover:bg-blue-600 w-full text-white py-2 text-lg"
           >
             {state.index === quizData.length - 1 ? "Finish Quiz" : "Next Question"}
           </button>

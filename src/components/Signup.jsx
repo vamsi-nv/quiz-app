@@ -1,22 +1,29 @@
-import { useRef } from "react";
+import { useState } from "react";
 import { useAuth } from "../context/AuthContextProvider";
 import { useNavigate } from "react-router-dom";
 
 function Signup() {
-  const nameRef = useRef();
-  const passwordRef = useRef();
-  const reEnteredPassRef = useRef();
+  const [formData, setFormData] = useState({
+    name: "",
+    password: "",
+    reEnteredPass: ""
+  });
 
   const navigate = useNavigate();
-
   const { setUserCredentials } = useAuth();
 
-  const handleSignUp = () => {
-    const name = nameRef.current.value.trim();
-    const password = passwordRef.current.value;
-    const reEnteredPass = reEnteredPassRef.current.value;
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
-    if (!name || !password || !reEnteredPass) {
+  const handleSignUp = () => {
+    const { name, password, reEnteredPass } = formData;
+
+    if (!name.trim() || !password || !reEnteredPass) {
       alert("Please fill in all fields");
       return;
     }
@@ -26,13 +33,8 @@ function Signup() {
       return;
     }
 
-    setUserCredentials((prev) => ({
-      ...prev,
-      username: name,
-      password: password,
-    }));
     const credentials = {
-      username: name,
+      username: name.trim(),
       password: password,
     };
 
@@ -40,34 +42,43 @@ function Signup() {
     localStorage.setItem("credentials", JSON.stringify(credentials));
 
     alert("Signup successful");
-    navigate("/dashboard")
+    navigate("/dashboard");
+  };
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") handleSignUp();
   };
 
   return (
     <div className="border w-[50%] lg:w-[30%] flex flex-col items-center justify-center gap-6 py-12">
       <input
         className="border p-3 w-[80%]"
-        ref={nameRef}
+        name="name"
         type="text"
         placeholder="Enter name"
+        value={formData.name}
+        onChange={handleChange}
         required
       />
 
       <input
         className="border p-3 w-[80%]"
-        ref={passwordRef}
+        name="password"
         type="password"
         placeholder="Enter password"
+        value={formData.password}
+        onChange={handleChange}
         required
       />
+
       <input
         className="border p-3 w-[80%]"
-        ref={reEnteredPassRef}
+        name="reEnteredPass"
         type="password"
         placeholder="Re-Enter password"
-        onKeyDown={(e) => {
-          if (e.key === "Enter") handleLogin();
-        }}
+        value={formData.reEnteredPass}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
         required
       />
 
@@ -77,7 +88,16 @@ function Signup() {
       >
         Sign Up
       </button>
-      <p className="text-xs">already have registered? <span className="underline text-blue-500 cursor-pointer" onClick={() => navigate("/login")}>login</span></p>
+      
+      <p className="text-xs">
+        already have registered?{" "}
+        <span 
+          className="underline text-blue-500 cursor-pointer" 
+          onClick={() => navigate("/login")}
+        >
+          login
+        </span>
+      </p>
     </div>
   );
 }
